@@ -1,14 +1,13 @@
+# frozen_string_literal: true
+
 require 'delegate'
 require 'openssl'
-require 'thread'
-
-
 module TCR
   class RecordableTCPSocket
     attr_reader :live, :socket, :recording
 
     def initialize(address, port, cassette)
-      raise TCR::NoCassetteError.new unless TCR.cassette
+      raise TCR::NoCassetteError unless TCR.cassette
 
       @read_lock = []
       @recording = cassette.next_session
@@ -18,8 +17,8 @@ module TCR
       if live
         begin
           @socket = TCPSocket.real_open(address, port)
-        rescue => e
-          recording << ["error", Marshal.dump(e)]
+        rescue StandardError => e
+          recording << ['error', Marshal.dump(e)]
           raise
         end
       else
@@ -27,6 +26,9 @@ module TCR
         check_recording_for_errors
       end
     end
+
+    # no-op for Ruby 3.1 compatibility
+    def hostname=(*args); end
 
     def read(bytes)
       _read(:read, bytes)
@@ -58,17 +60,14 @@ module TCR
       str.length
     end
 
-    def ssl_version
-    end
+    def ssl_version; end
 
     def cipher
       {}
     end
 
     def to_io
-      if live
-        @socket.to_io
-      end
+      @socket.to_io if live
     end
 
     def closed?
@@ -87,27 +86,22 @@ module TCR
       end
     end
 
-    def setsockopt(*args)
-    end
+    def setsockopt(*args); end
 
     private
 
     attr_reader :config_block_for_reads
 
     def check_recording_for_errors
-      raise Marshal.load(recording.first.last) if recording.first.first == "error"
+      raise Marshal.load(recording.first.last) if recording.first.first == 'error'
     end
 
     def _intercept_socket
-      if @socket
-        @socket = yield @socket
-      end
+      @socket = yield @socket if @socket
     end
 
     def _block_for_read_data
-      while recording.first && recording.first.first != "read"
-        @read_lock.pop
-      end
+      @read_lock.pop while recording.first && recording.first.first != 'read'
     end
 
     def _check_for_blocked_reads
@@ -116,26 +110,27 @@ module TCR
 
     def _write(method, data)
       if live
-        payload = data.dup if !data.is_a?(Symbol)
+        payload = data.dup unless data.is_a?(Symbol)
         @socket.__send__(method, payload)
-        recording << ["write", data.dup]
+        recording << ['write', data.dup]
       else
-        direction, data = recording.shift
-        _ensure_direction("write", direction) if direction
+        direction, = recording.shift
+        _ensure_direction('write', direction) if direction
         _check_for_blocked_reads
       end
     end
 
     def _read(method, *args, blocking: true)
       if live
-          data    = @socket.__send__(method, *args)
-          payload = data.dup if !data.is_a?(Symbol)
-          recording << ["read", payload]
+        data    = @socket.__send__(method, *args)
+        payload = data.dup unless data.is_a?(Symbol)
+        recording << ['read', payload]
       else
         _block_for_read_data if blocking && config_block_for_reads
         raise EOFError if recording.empty?
+
         direction, data = recording.shift
-        _ensure_direction("read", direction)
+        _ensure_direction('read', direction)
       end
       data
     rescue IO::EAGAINWaitReadable, OpenSSL::SSL::SSLErrorWaitReadable
@@ -143,14 +138,16 @@ module TCR
     end
 
     def _ensure_direction(desired, actual)
-      raise TCR::DirectionMismatchError.new("Expected to '#{desired}' but next in recording was '#{actual}'") unless desired == actual
+      return if desired == actual
+
+      raise TCR::DirectionMismatchError, "Expected to '#{desired}' but next in recording was '#{actual}'"
     end
   end
 
   class RecordableSSLSocket < SimpleDelegator
     def initialize(tcr_socket)
       super(tcr_socket)
-      tcr_socket.send(:_intercept_socket) do |sock|
+      tcr_socket.__send__(:_intercept_socket) do |sock|
         socket = OpenSSL::SSL::SSLSocket.new(sock, OpenSSL::SSL::SSLContext.new)
         socket.sync_close = true
         socket.connect
@@ -158,7 +155,7 @@ module TCR
       end
     end
 
-    def sync_close=(arg)
+    def sync_close=(_arg)
       true
     end
 
@@ -166,7 +163,7 @@ module TCR
       self
     end
 
-    def sync=(arg)
+    def sync=(_arg)
       self
     end
 
@@ -178,17 +175,14 @@ module TCR
       self
     end
 
-    def session=(args)
-    end
+    def session=(args); end
 
     def io
       self
     end
 
     def shutdown
-      if live
-        socket.io.shutdown
-      end
+      socket.io.shutdown if live
     end
 
     def connect_nonblock(*)
@@ -199,7 +193,7 @@ module TCR
       self
     end
 
-    def post_connection_check(*args)
+    def post_connection_check(*_args)
       true
     end
   end

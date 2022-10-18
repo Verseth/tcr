@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 module TCR
@@ -16,7 +18,7 @@ module TCR
     end
 
     def recording?
-      @recording ||= !File.exists?(filename)
+      @recording ||= !File.exist?(filename)
     end
 
     def next_session
@@ -25,32 +27,32 @@ module TCR
         @sessions.last
       else
         raise NoMoreSessionsError if @sessions.empty?
+
         @sessions.shift
       end
     end
 
     def save
-      return if !recording?
+      return unless recording?
+
       File.write(filename, marshal(@sessions))
     rescue Encoding::UndefinedConversionError
       File.binwrite(filename, marshal(@sessions))
     end
 
     def check_hits_all_sessions
-      if !recording?
-        raise ExtraSessionsError if !@sessions.empty?
-      end
+      raise ExtraSessionsError if !recording? && !@sessions.empty?
     end
 
     protected
 
     def unmarshal(content)
       case TCR.configuration.format
-      when "json"
+      when 'json'
         JSON.parse(content)
-      when "yaml"
+      when 'yaml'
         YAML.load(content)
-      when "marshal"
+      when 'marshal'
         Marshal.load(content)
       else
         raise "unrecognized cassette format '#{TCR.configuration.format}'; " \
@@ -60,11 +62,11 @@ module TCR
 
     def marshal(content)
       case TCR.configuration.format
-      when "json"
+      when 'json'
         JSON.pretty_generate(content)
-      when "yaml"
+      when 'yaml'
         YAML.dump(content)
-      when "marshal"
+      when 'marshal'
         Marshal.dump(content)
       else
         raise "unrecognized cassette format '#{TCR.configuration.format}'; " \
@@ -72,8 +74,9 @@ module TCR
       end
     end
 
+    # @return [String]
     def filename
-      "#{TCR.configuration.cassette_library_dir}/#{name}.#{TCR.configuration.format}"
+      ::File.expand_path("#{name}.#{TCR.configuration.format}", TCR.configuration.cassette_library_dir.to_s)
     end
 
     def verify_cassette_path_is_writable

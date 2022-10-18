@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # support LDAP(S) connections
 if defined? ::Net::LDAP
 
@@ -6,6 +8,7 @@ if defined? ::Net::LDAP
       super
       # see: https://github.com/ruby-ldap/ruby-net-ldap/pull/314
       return if io.closed?
+
       io.close
     end
   end

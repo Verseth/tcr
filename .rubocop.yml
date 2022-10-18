@@ -1,0 +1,34 @@
+inherit_gem:
+  rubocop-espago: rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - 'spec/**/*'
+
+Gemspec/DependencyVersion:
+  Enabled: false
+
+Style/DocumentationMethod:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/MissingElse:
+  Enabled: false
+
+Security/MarshalLoad:
+  Enabled: false
+
+Style/ImplicitRuntimeError:
+  Enabled: false
+
+Security/YAMLLoad:
+  Enabled: false
+
+Bundler/GemComment:
+  Enabled: false
+
+Bundler/GemVersion:
+  Enabled: false

@@ -1,0 +1,45 @@
+name: CI Ruby
+
+on:
+  push:
+    branches: [ 'master' ]
+  pull_request:
+    types: [ 'opened' ]
+    branches: [ 'master' ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    strategy:
+      matrix:
+        ruby-version: ['2.6', '2.7', '3.0', '3.1']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run specs
+        run: bundle exec rspec
+
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      # Add or replace any other lints here
+      - name: Security audit dependencies
+        run: bundle exec bundle audit --update
+      # - name: Lint Ruby files
+      #   run: bundle exec rubocop --parallel

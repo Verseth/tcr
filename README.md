@@ -1,8 +1,11 @@
-# TCR (TCP + VCR)
+# TCR revived (TCP + VCR)
 
-[![Build Status](https://travis-ci.org/robforman/tcr.png?branch=master)](https://travis-ci.org/robforman/tcr)
+[![license](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+[![CI badge](https://github.com/Verseth/tcr/actions/workflows/ci_ruby.yml/badge.svg)](https://github.com/Verseth/tcr/actions/workflows/ci_ruby.yml)
 
+The original version of this extension seems to be unmaintained at least since 2018.
 
+This fork aims to bring support for Ruby 3.0 and 3.1.
 
 TCR is a *very* lightweight version of [VCR](https://github.com/vcr/vcr) for TCP sockets.
 

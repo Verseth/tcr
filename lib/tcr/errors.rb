@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TCR
   class TCRError < StandardError; end
   class NoCassetteError < TCRError; end
