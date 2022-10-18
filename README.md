@@ -1,11 +1,15 @@
 # TCR revived (TCP + VCR)
 
 [![license](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
-[![CI badge](https://github.com/Verseth/tcr/actions/workflows/ci_ruby.yml/badge.svg)](https://github.com/Verseth/tcr/actions/workflows/ci_ruby.yml)
+[![CI badge](https://github.com/Verseth/tcr_revived/actions/workflows/ci_ruby.yml/badge.svg)](https://github.com/Verseth/tcr_revived/actions/workflows/ci_ruby.yml)
 
-The original version of this extension seems to be unmaintained at least since 2018.
+## Why?
 
-This fork aims to bring support for Ruby 3.0 and 3.1.
+The original version of this gem seemed to have been unmaintained at least since 2018.
+
+This fork aims to bring support for Ruby 3.0 and 3.1. It should be a drop-in replacement.
+
+## Original docs
 
 TCR is a *very* lightweight version of [VCR](https://github.com/vcr/vcr) for TCP sockets.
 
@@ -15,7 +19,7 @@ Currently used for recording 'net/smtp', 'net/imap' and 'net/ldap' interactions 
 
 Add this line to your application's Gemfile:
 
-    gem 'tcr'
+    gem 'tcr_revived', require: 'tcr'
 
 And then execute:
 
@@ -23,7 +27,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install tcr
+    $ gem install tcr_revived
 
 ## Usage
 

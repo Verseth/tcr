@@ -14,8 +14,8 @@ require 'tcr/version'
   gem.homepage      = 'https://github.com/Verseth/tcr'
   gem.license = 'MIT'
 
-  gem.metadata["homepage_uri"] = gem.homepage
-  gem.metadata["source_code_uri"] = gem.homepage
+  gem.metadata['homepage_uri'] = gem.homepage
+  gem.metadata['source_code_uri'] = gem.homepage
   gem.metadata['rubygems_mfa_required'] = 'true'
 
   # Specify which files should be added to the gem when it is released.
@@ -25,12 +25,10 @@ require 'tcr/version'
       (f == __FILE__) || f.match(%r{\A(?:(?:bin|test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
     end
   end
-  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+  gem.bindir = 'exe'
+  gem.executables = gem.files.grep(%r{\Aexe/}) { |f| ::File.basename(f) }
   gem.require_paths = ['lib']
   gem.required_ruby_version = '>= 2.6.10'
-
-  gem.bindir = "exe"
-  gem.executables = gem.files.grep(%r{\Aexe/}) { |f| ::File.basename(f) }
 
   gem.add_development_dependency 'debug'
   gem.add_development_dependency 'geminabox'
