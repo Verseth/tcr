@@ -28,7 +28,7 @@ require 'tcr/version'
   gem.bindir = 'exe'
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| ::File.basename(f) }
   gem.require_paths = ['lib']
-  gem.required_ruby_version = '>= 2.6.10'
+  gem.required_ruby_version = '>= 2.7'
 
   gem.add_development_dependency 'debug'
   gem.add_development_dependency 'geminabox'

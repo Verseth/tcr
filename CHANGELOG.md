@@ -5,6 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for Ruby 3.2
+- Test running script `bin/test`
+
+### Removed
+
+- Support for Ruby 2.6
+
 ## [0.3.0] - 2022-10-18
 
 This is the initial version of this fork.

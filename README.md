@@ -7,7 +7,7 @@
 
 The original version of this gem seemed to have been unmaintained at least since 2018.
 
-This fork aims to bring support for Ruby 3.0 and 3.1. It should be a drop-in replacement.
+This fork aims to bring support for Ruby 3.0, 3.1 and 3.2. It should be a drop-in replacement.
 
 ## Original docs
 
