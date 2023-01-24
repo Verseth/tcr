@@ -362,11 +362,11 @@ RSpec.describe TCR do
       message = Mail::Message.new(raw_contents)
       smtp_auth_parameters = {
         address: 'smtp.gmail.com',
-port: 587,
-user_name: 'dummy',
-password: 'dummy',
-enable_starttls_auto: true,
-authentication: :login
+        port: 587,
+        user_name: 'dummy',
+        password: 'dummy',
+        enable_starttls_auto: true,
+        authentication: :login
       }
       message.delivery_method(:smtp, smtp_auth_parameters)
 
